@@ -3,4 +3,4 @@ pandas
 numpy
 pillow
 networkx
-opencv-python-headlines
+opencv-python-headless
