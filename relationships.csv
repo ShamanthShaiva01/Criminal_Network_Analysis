@@ -1,0 +1,13 @@
+source,target,type
+Person_A,Person_B,Communication
+Person_A,Phone_101,Phone
+Person_B,Phone 101,Phone
+Person_B,Bank 001,Financial
+Person_C,Bank_001,Financial
+Person_C,Location_X,Location
+Person A,Location X,Location
+Person_D,Person_C,Communication
+Person E,Person A,Communication
+Person_E,Location_Y,Location
+Person_F,Bank_002,Financial
+Person C,Bank 002,Financial
