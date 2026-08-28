@@ -1,0 +1,9 @@
+sender, receiver, amount, date 
+Person_A, Person_B, 50000, 2026-01-01 
+Person B, Person_C, 25000, 2026-01-03 
+Person A, Person C, 10000, 2026-01-05 
+Person_C, Person_D, 15000, 2026-01-06 
+Person_B, Person_D, 30000, 2026-01-07 
+Person_A, Person_B, 20000, 2026-01-08 
+Person_D, Person_E, 12000, 2026-01-10 
+Person_C, Person_A, 8000, 2026-01-11
