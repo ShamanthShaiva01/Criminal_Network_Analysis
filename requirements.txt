@@ -4,3 +4,4 @@ numpy
 pillow
 networkx
 opencv-python-headless
+pyvis
