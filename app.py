@@ -104,7 +104,7 @@ for value in data["source"]:
 
 for key in data["target"]: 
     if key.startswith("Person_"): 
-        persons.add(value)
+        persons.add(key)
 
 phone_records = len(
     data[data["type"] == "Phone"]
