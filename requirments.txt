@@ -1,0 +1,7 @@
+streamlit
+pandas
+numpy
+networkx
+cv2
+json
+os
