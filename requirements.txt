@@ -3,6 +3,4 @@ pandas
 numpy
 pillow
 networkx
-cv2
-json
-os
+opencv-python
