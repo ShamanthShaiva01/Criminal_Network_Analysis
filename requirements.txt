@@ -3,4 +3,4 @@ pandas
 numpy
 pillow
 networkx
-opencv-python-headlines==4.11.0.86
+opencv-python-headlines
