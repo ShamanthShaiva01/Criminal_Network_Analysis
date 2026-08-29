@@ -104,7 +104,7 @@ for value in data["source"]:
 
 for key in data["target"]: 
     if key.startswith("Person_"): 
-        persons.add(key)
+        persons.add(value)
 
 phone_records = len(
     data[data["type"] == "Phone"]
@@ -183,6 +183,9 @@ st.write("###  Network Importance Score")
 
 st.progress( min(int(score), 100))
 st.write(f"Importance score: {score:.1f}/100")
+st.write("NETWORK IMPORTANT SCORE")
+st.write ("• 0-20 : Low network importance")
+st.write("• 20-50 : Moderate")
 
 st.write("### Direct Connections")
 if connections:
@@ -818,15 +821,12 @@ if case_ids:
         key="delete_case_select"
     )
 
-    if st.button("🗑️ Delete Selected Case", key="delete_case_id"):
+    if st.button("🗑️ Delete Selected Case"):
 
         st.session_state.cases = [
             case for case in st.session_state.cases
             if case.get("Case ID", case.get("case_id", "")) != delete_case_id
         ]
-        with open(CASE_FILE, "w", encoding="utf-8") as f:
-            json.dump(st.session_state.cases, f, indent=4)
-        
 
         st.success(f"✅ Case {delete_case_id} deleted successfully!")
 
@@ -1308,8 +1308,7 @@ new_status = st.selectbox(
     ["Open", "Under Investigation", "Solved", "Closed"],
     key="new_status"
 )
-status = "Open"
-case_found= False
+
 if st.button("Update Status",key="update_status_button"):
 
     case_found = False
@@ -1319,7 +1318,6 @@ if st.button("Update Status",key="update_status_button"):
         if str(case.get("Case ID")) == str(update_case_id):
 
             case["status"] = new_status
-            status = new_status
             case_found = True
 
             # Save updated cases to JSON
