@@ -1338,7 +1338,7 @@ if st.button("Update Status",key="update_status_button"):
     if not case_found:
         st.error(f"❌ Case {update_case_id} not found")
 st.subheader("📋 Case Status")
-status = case_found.get("status","Open")
+status = new_status.get("status","Open")
 
 if status == "Under Investigation":
     st.warning(f"🔍 Status: {status}")
