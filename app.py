@@ -818,12 +818,15 @@ if case_ids:
         key="delete_case_select"
     )
 
-    if st.button("🗑️ Delete Selected Case"):
+    if st.button("🗑️ Delete Selected Case", key=f"delete_{case['case_id]}"):
 
         st.session_state.cases = [
             case for case in st.session_state.cases
             if case.get("Case ID", case.get("case_id", "")) != delete_case_id
         ]
+        with open(CASE_FILE, "w", encoding="utf-8") as f:
+            json.dump(st.session_state.cases, f, indent=4)
+        
 
         st.success(f"✅ Case {delete_case_id} deleted successfully!")
 
