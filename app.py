@@ -818,7 +818,7 @@ if case_ids:
         key="delete_case_select"
     )
 
-    if st.button("🗑️ Delete Selected Case", key=f"delete_{case['case_id]}"):
+    if st.button("🗑️ Delete Selected Case", key=f"delete_{case['case_id']}"):
 
         st.session_state.cases = [
             case for case in st.session_state.cases
