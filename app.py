@@ -1308,7 +1308,8 @@ new_status = st.selectbox(
     ["Open", "Under Investigation", "Solved", "Closed"],
     key="new_status"
 )
-
+status = "Open"
+case_found= False
 if st.button("Update Status",key="update_status_button"):
 
     case_found = False
@@ -1318,6 +1319,7 @@ if st.button("Update Status",key="update_status_button"):
         if str(case.get("Case ID")) == str(update_case_id):
 
             case["status"] = new_status
+            status = new_status
             case_found = True
 
             # Save updated cases to JSON
@@ -1338,7 +1340,6 @@ if st.button("Update Status",key="update_status_button"):
     if not case_found:
         st.error(f"❌ Case {update_case_id} not found")
 st.subheader("📋 Case Status")
-status = new_status.get("status","Open")
 
 if status == "Under Investigation":
     st.warning(f"🔍 Status: {status}")
