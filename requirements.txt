@@ -5,3 +5,4 @@ pillow
 networkx
 opencv-python-headless
 pyvis
+requests
