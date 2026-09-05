@@ -2122,34 +2122,75 @@ if st.session_state.get("logged_in", False):
 
         st.rerun()  
   
-# Step 33: Activity Log
+# ==================================================
+# 📋 INVESTIGATION ACTIVITY LOG
+# ==================================================
 
+# Initialize activity log
 if "activity_log" not in st.session_state:
     st.session_state.activity_log = []
-st.subheader("📋 Investigation Activity Log")
 
-if st.button("Clear Activity Log "):
-    st.session_state.activity_log=[]
-    st.rerun()
 
-if st.session_state.activity_log:
-    for activity in reversed(st.session_state.activity_log):
-        st.info(f"• {activity}")
-
-else:
-    st.info("No investigation activity recorded yet.")
+# Activity logging function
 def log_activity(case_id, message):
 
     if "activity_log" not in st.session_state:
         st.session_state.activity_log = []
 
-    st.session_state.activity_log.append({
-        "Case ID": case_id,
-        "Message": message,
+    activity = {
+        "Case ID": str(case_id),
+        "Message": str(message),
         "Time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    })
-#log_activity(case_id, "Case was created.")
-#log_activity(update_case_id,f"status changed to {new_status}.")
+    }
+
+    st.session_state.activity_log.append(activity)
+
+
+# --------------------------------------------------
+# ACTIVITY LOG DISPLAY
+# --------------------------------------------------
+
+st.subheader("📋 Investigation Activity Log")
+
+
+# Clear activity log
+if st.button(
+    "🗑️ Clear Activity Log",
+    key="clear_activity_log"
+):
+
+    st.session_state.activity_log = []
+
+    st.success("✅ Activity log cleared.")
+
+    st.rerun()
+
+
+# Display activities
+if st.session_state.activity_log:
+
+    for activity in reversed(
+        st.session_state.activity_log
+    ):
+
+        st.info(
+            f"📂 **Case:** {activity['Case ID']}\n\n"
+            f"📝 **Activity:** {activity['Message']}\n\n"
+            f"🕒 **Time:** {activity['Time']}"
+        )
+
+else:
+
+    st.info(
+        "ℹ️ No investigation activity recorded yet."
+    )
+
+
+# ==================================================
+# END INVESTIGATION ACTIVITY LOG
+# ==================================================
+log_activity(case_id, "Case was created.")
+log_activity(update_case_id,f"status changed to {new_status}.")
 
 
 
