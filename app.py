@@ -1591,6 +1591,12 @@ if st.session_state.active_page == "🤖 AI":
         "Administrator",
         "Investigator"
     ]:
+        unified_graph = create_unified_network(
+        "data/relationships.csv",
+        "data/cdr.csv",
+        "data/transactions.csv",
+        "data/locations.csv"
+    )
 
         st.subheader(
             "📄 Investigation Report Generator"
