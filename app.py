@@ -724,12 +724,11 @@ st.info(f"Selected tool: {option}")
 # Step 18: Case Registration
 CASE_FILE = "cases.json"
 
-if "cases" not in st.session_state:
-    if os.path.exists(CASE_FILE):
-        with open(CASE_FILE, "r", encoding="utf-8") as f:
-            st.session_state.cases = json.load(f)
-    else:
-        st.session_state.cases = []
+if os.path.exists(CASE_FILE):
+    with open(CASE_FILE, "r", encoding="utf-8") as f:
+        st.session_state.cases = json.load(f)
+else:
+    st.session_state.cases = []
 
 st.subheader("📝 Register New Case")
 
@@ -776,6 +775,16 @@ if submitted:
 
 st.subheader("🗑️ Delete Case")
 
+# Always use the latest cases from cases.json
+if os.path.exists(CASE_FILE):
+    with open(CASE_FILE, "r", encoding="utf-8") as f:
+        latest_cases = json.load(f)
+else:
+    latest_cases = []
+
+# Keep session state synchronized
+st.session_state.cases = latest_cases
+
 case_ids = [
     str(case.get("Case ID", case.get("case_id", "")))
     for case in st.session_state.cases
@@ -790,24 +799,29 @@ if case_ids:
         key="delete_case_select"
     )
 
-    if st.button("🗑️ Delete Selected Case"):
+    if st.button("🗑️ Delete Selected Case", key="delete_case_button"):
 
-        # Remove case from session state
-        st.session_state.cases = [
+        # Create a completely new list without the deleted case
+        updated_cases = [
             case for case in st.session_state.cases
             if str(case.get("Case ID", case.get("case_id", ""))) != str(delete_case_id)
         ]
 
-        # Permanently save the updated case list
+        # Save the new list permanently to cases.json
         with open(CASE_FILE, "w", encoding="utf-8") as f:
             json.dump(
-                st.session_state.cases,
+                updated_cases,
                 f,
                 indent=4,
                 ensure_ascii=False
             )
 
-        st.success(f"✅ Case {delete_case_id} deleted permanently!")
+        # Update session state
+        st.session_state.cases = updated_cases
+
+        st.success(
+            f"✅ Case {delete_case_id} deleted permanently!"
+        )
 
         st.rerun()
 
@@ -1364,11 +1378,7 @@ if st.session_state.cases:
     for case in st.session_state.cases:
         
         case_id = case["Case ID"]
-        
-        status = st.session_state.case_status.get(
-            case_id,
-            "Open"
-        )
+        status = case.get("status","Open")
         
         evidence_count = len(
             st.session_state.evidence.get(case_id, [])
