@@ -2138,6 +2138,16 @@ if st.session_state.activity_log:
 
 else:
     st.info("No investigation activity recorded yet.")
+def log_activity(case_id, message):
+
+    if "activity_log" not in st.session_state:
+        st.session_state.activity_log = []
+
+    st.session_state.activity_log.append({
+        "Case ID": case_id,
+        "Message": message,
+        "Time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    })
 log_activity(case_id, "Case was created.")
 log_activity(update_case_id,f"status changed to {new_status}.")
 
