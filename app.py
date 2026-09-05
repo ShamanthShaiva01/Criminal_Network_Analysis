@@ -483,11 +483,12 @@ if st.session_state.active_page == "📂 Cases":
                         indent=4,
                         ensure_ascii=False
                     )
-                log_activity(case_id,"Case was created")
+               
 
                 st.success(
                     f"✅ Case {case_id} created successfully!"
                 )
+                log_activity(case_id,"Case was created")
 
         else:
 
@@ -2204,8 +2205,8 @@ if st.session_state.activity_log:
             activity_time = "Time not recorded"
 
         st.info(
-            f"📂 **Case:** {case_id}"
-            f"📝 **Activity:** {message}"
+            f"📂 **Case:** {case_id}\n"
+            f"📝 **Activity:** {message}\n"
             f"🕒 **Time:** {activity_time}"
         )
 
