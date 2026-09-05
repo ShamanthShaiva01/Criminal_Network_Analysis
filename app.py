@@ -368,6 +368,12 @@ if st.session_state.active_page == "📂 Cases":
     # --------------------------------------------------
     # CASE STATISTICS
     # --------------------------------------------------
+    if "cases" not in st.session_state:
+    if os.path.exists("cases.json"):
+        with open("cases.json", "r", encoding="utf-8") as f:
+            st.session_state.cases = json.load(f)
+    else:
+        st.session_state.cases = []
 
     total_cases = len(st.session_state.cases)
 
