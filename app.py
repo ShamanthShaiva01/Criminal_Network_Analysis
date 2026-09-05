@@ -2189,11 +2189,6 @@ else:
 # ==================================================
 # END INVESTIGATION ACTIVITY LOG
 # ==================================================
-log_activity(case_id, "Case was created.")
-log_activity(update_case_id,f"status changed to {new_status}.")
-
-
-
 
 st.caption("Prototype developed for Smart India Hackathon 2026")
 
