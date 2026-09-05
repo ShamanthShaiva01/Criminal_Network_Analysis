@@ -483,6 +483,7 @@ if st.session_state.active_page == "📂 Cases":
                         indent=4,
                         ensure_ascii=False
                     )
+                log_activity(case_id,"Case was created")
 
                 st.success(
                     f"✅ Case {case_id} created successfully!"
@@ -2012,7 +2013,9 @@ if st.button("Update Status",key="update_status_button"):
         if str(case.get("Case ID")) == str(update_case_id):
 
             case["status"] = new_status
+            log_activity(update_case_id,f"Status changed to {new_status}.")
             case_found = True
+            
 
             # Save updated cases to JSON
             with open(CASE_FILE, "w", encoding="utf-8") as f:
