@@ -2200,7 +2200,7 @@ if st.session_state.activity_log:
 
         else:
 
-            case_id = "N/A"
+            case_id = f"{case_id}"
             message = str(activity)
             activity_time = "Time not recorded"
 
