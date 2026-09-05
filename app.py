@@ -813,9 +813,7 @@ if case_ids:
 
 else:
     st.info("📂 No cases available to delete.")
-else:
-
-    st.info("No cases available to delete.")
+    
 #-----EDIT CASE-----
 st.subheader("✏️ Edit Case")
 
