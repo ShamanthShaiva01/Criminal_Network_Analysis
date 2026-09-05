@@ -2149,14 +2149,31 @@ def log_activity(case_id, message):
     st.session_state.activity_log.append(activity)
 
 
-# --------------------------------------------------
-# ACTIVITY LOG DISPLAY
-# --------------------------------------------------
+# ==================================================
+# 📋 INVESTIGATION ACTIVITY LOG
+# ==================================================
+
+if "activity_log" not in st.session_state:
+    st.session_state.activity_log = []
+
+
+def log_activity(case_id, message):
+
+    if "activity_log" not in st.session_state:
+        st.session_state.activity_log = []
+
+    activity = {
+        "Case ID": str(case_id),
+        "Message": str(message),
+        "Time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+
+    st.session_state.activity_log.append(activity)
+
 
 st.subheader("📋 Investigation Activity Log")
 
 
-# Clear activity log
 if st.button(
     "🗑️ Clear Activity Log",
     key="clear_activity_log"
@@ -2169,32 +2186,34 @@ if st.button(
     st.rerun()
 
 
-# Display activities
 if st.session_state.activity_log:
 
-    for activity in reversed(
-        st.session_state.activity_log
-    ):
+    for activity in reversed(st.session_state.activity_log):
+
+        # Handle old activity entries that may be strings
+        if isinstance(activity, dict):
+
+            case_id = activity.get("Case ID", "N/A")
+            message = activity.get("Message", "Unknown activity")
+            activity_time = activity.get("Time", "Unknown time")
+
+        else:
+
+            case_id = "N/A"
+            message = str(activity)
+            activity_time = "Time not recorded"
 
         st.info(
-            f"📂 **Case:** {activity['Case ID']}\n\n"
-            f"📝 **Activity:** {activity['Message']}\n\n"
-            f"🕒 **Time:** {activity['Time']}"
+            f"📂 **Case:** {case_id}\n\n"
+            f"📝 **Activity:** {message}\n\n"
+            f"🕒 **Time:** {activity_time}"
         )
 
 else:
 
-    st.info(
-        "ℹ️ No investigation activity recorded yet."
-    )
+    st.info("ℹ️ No investigation activity recorded yet.")
 
 
 # ==================================================
 # END INVESTIGATION ACTIVITY LOG
 # ==================================================
-
-st.caption("Prototype developed for Smart India Hackathon 2026")
-
-
-
-
