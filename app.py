@@ -1974,7 +1974,8 @@ total_evidence = sum(
     len(files)
     for files in st.session_state.evidence.values()
 )
-
+if "ai_results" not in st.session_state:
+    st.session_state.ai_results = {}
 total_ai_results = len(st.session_state.ai_results)
 
 col1, col2, col3 = st.columns(3)
