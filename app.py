@@ -12,6 +12,82 @@ from unified_network import create_unified_network
 from network import create_network, get_entity_type, calculate_importance,calculate_priority
 from unified_network import create_unified_network,create_unified_network,get_entity_type
 from ai_analysis import generate_investigation_summary
+import base64
+import requests
+import streamlit as st
+
+
+GITHUB_REPO = "Shamanthkc01/Criminal_Network_Analysis"
+GITHUB_FILE = "cases.json"
+GITHUB_BRANCH = "main"
+
+
+def save_cases_to_github(cases):
+    """Save the latest cases.json directly to GitHub."""
+
+    token = st.secrets["GITHUB_TOKEN"]
+
+    url = (
+        f"https://api.github.com/repos/"
+        f"{GITHUB_REPO}/contents/{GITHUB_FILE}"
+    )
+
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/vnd.github+json"
+    }
+
+    # Get current file information
+    response = requests.get(
+        url,
+        headers=headers,
+        params={"ref": GITHUB_BRANCH}
+    )
+
+    if response.status_code != 200:
+        st.error(
+            f"❌ Could not access cases.json on GitHub: "
+            f"{response.status_code}"
+        )
+        return False
+
+    file_data = response.json()
+    sha = file_data["sha"]
+
+    # Convert cases to JSON
+    json_content = json.dumps(
+        cases,
+        indent=4,
+        ensure_ascii=False
+    )
+
+    encoded_content = base64.b64encode(
+        json_content.encode("utf-8")
+    ).decode("utf-8")
+
+    # Update GitHub
+    update_data = {
+        "message": "Update cases.json from Streamlit",
+        "content": encoded_content,
+        "sha": sha,
+        "branch": GITHUB_BRANCH
+    }
+
+    update_response = requests.put(
+        url,
+        headers=headers,
+        json=update_data
+    )
+
+    if update_response.status_code in [200, 201]:
+        return True
+
+    st.error(
+        f"❌ GitHub update failed: "
+        f"{update_response.status_code}"
+    )
+
+    return False
 st.set_page_config(
     page_title="Criminal Network AI",
     page_icon="",
@@ -775,16 +851,6 @@ if submitted:
 
 st.subheader("🗑️ Delete Case")
 
-# Always use the latest cases from cases.json
-if os.path.exists(CASE_FILE):
-    with open(CASE_FILE, "r", encoding="utf-8") as f:
-        latest_cases = json.load(f)
-else:
-    latest_cases = []
-
-# Keep session state synchronized
-st.session_state.cases = latest_cases
-
 case_ids = [
     str(case.get("Case ID", case.get("case_id", "")))
     for case in st.session_state.cases
@@ -799,15 +865,23 @@ if case_ids:
         key="delete_case_select"
     )
 
-    if st.button("🗑️ Delete Selected Case", key="delete_case_button"):
+    if st.button(
+        "🗑️ Delete Selected Case",
+        key="delete_case_button"
+    ):
 
-        # Create a completely new list without the deleted case
+        # Remove selected case
         updated_cases = [
             case for case in st.session_state.cases
-            if str(case.get("Case ID", case.get("case_id", ""))) != str(delete_case_id)
+            if str(
+                case.get(
+                    "Case ID",
+                    case.get("case_id", "")
+                )
+            ) != str(delete_case_id)
         ]
 
-        # Save the new list permanently to cases.json
+        # Save locally
         with open(CASE_FILE, "w", encoding="utf-8") as f:
             json.dump(
                 updated_cases,
@@ -819,9 +893,21 @@ if case_ids:
         # Update session state
         st.session_state.cases = updated_cases
 
-        st.success(
-            f"✅ Case {delete_case_id} deleted permanently!"
-        )
+        # Save permanently to GitHub
+        github_saved = save_cases_to_github(updated_cases)
+
+        if github_saved:
+            st.success(
+                f"✅ Case {delete_case_id} deleted permanently!"
+            )
+            st.info(
+                "☁️ Updated cases.json has been saved to GitHub."
+            )
+        else:
+            st.warning(
+                "⚠️ Case deleted locally, but GitHub could not "
+                "be updated."
+            )
 
         st.rerun()
 
