@@ -777,8 +777,9 @@ if submitted:
 st.subheader("🗑️ Delete Case")
 
 case_ids = [
-    case.get("Case ID", case.get("case_id", ""))
+    str(case.get("Case ID", case.get("case_id", "")))
     for case in st.session_state.cases
+    if case.get("Case ID", case.get("case_id", "")) != ""
 ]
 
 if case_ids:
@@ -791,15 +792,27 @@ if case_ids:
 
     if st.button("🗑️ Delete Selected Case"):
 
+        # Remove case from session state
         st.session_state.cases = [
             case for case in st.session_state.cases
-            if case.get("Case ID", case.get("case_id", "")) != delete_case_id
+            if str(case.get("Case ID", case.get("case_id", ""))) != str(delete_case_id)
         ]
 
-        st.success(f"✅ Case {delete_case_id} deleted successfully!")
+        # Permanently save the updated case list
+        with open(CASE_FILE, "w", encoding="utf-8") as f:
+            json.dump(
+                st.session_state.cases,
+                f,
+                indent=4,
+                ensure_ascii=False
+            )
+
+        st.success(f"✅ Case {delete_case_id} deleted permanently!")
 
         st.rerun()
 
+else:
+    st.info("📂 No cases available to delete.")
 else:
 
     st.info("No cases available to delete.")
