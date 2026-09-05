@@ -2204,8 +2204,8 @@ if st.session_state.activity_log:
             activity_time = "Time not recorded"
 
         st.info(
-            f"📂 **Case:** {case_id}\n\n"
-            f"📝 **Activity:** {message}\n\n"
+            f"📂 **Case:** {case_id}"
+            f"📝 **Activity:** {message}"
             f"🕒 **Time:** {activity_time}"
         )
 
