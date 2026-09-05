@@ -1963,6 +1963,8 @@ if st.session_state.active_page == "👤 Profile":
 # Step 28: Live Dashboard Statistics
 
 st.subheader("📊 Live Investigation Statistics")
+if "cases" not in st.session_state:
+    st.session_state.cases =[]
 
 total_cases = len(st.session_state.cases)
 
