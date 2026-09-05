@@ -1318,24 +1318,41 @@ if st.button("Update Status",key="update_status_button"):
 
     if not case_found:
         st.error(f"❌ Case {update_case_id} not found")
-if selected_case:
-    status = selected_case.get("status","Unknown")
-    st.subheader("📋 Case Status")
-    if status == "Under Investigation":
-        st.warning(f"🔍 Status: {status}")
+# 📋 Case Status
+st.subheader("📋 Case Status")
 
-    elif status == "Solved":
-        st.success(f"✅ Status: {status}")
+if update_case_id.strip():
 
-    elif status == "Closed":
-        st.info(f"🔒 Status: {status}")
+    selected_status_case = next(
+        (
+            case for case in st.session_state.cases
+            if str(case.get("Case ID", "")) == str(update_case_id)
+        ),
+        None
+    )
 
-    elif status == "Open":
-        st.write(f"📌 Status: {status}")
+    if selected_status_case:
+        status = selected_status_case.get("status", "Unknown")
+
+        if status == "Under Investigation":
+            st.warning(f"🔍 Status: {status}")
+
+        elif status == "Solved":
+            st.success(f"✅ Status: {status}")
+
+        elif status == "Closed":
+            st.info(f"🔒 Status: {status}")
+
+        elif status == "Open":
+            st.write(f"📌 Status: {status}")
+
+        else:
+            st.write(f"📌 Status: {status}")
 
     else:
-        st.write(f"📌 Status: {status}")
-
+        st.info("Enter a valid Case ID to view its status.")
+else:
+    st.info("Enter a Case ID above to view its current status.")
 # Step 30: Case Management Table
 
 st.subheader("📋 Case Management")
