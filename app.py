@@ -522,39 +522,7 @@ if st.session_state.role in [
         f"Financial:{row['Financial']} |"
         f"Location: {row['Location']}"
     )
-st.subheader("🚨 Suspicious Activity Detection")
-
-suspicious_activities = []
-
-for case in st.session_state.get("cases",[]):
-    status = str(case.get("status", case.get("Status", ""))).lower()
-    priority = str(case.get("priority", case.get("Priority", ""))).lower()
-
-    if priority == "high" or status == "investigating":
-        suspicious_activities.append(case)
-
-if suspicious_activities:
-    st.warning(f"⚠️ {len(suspicious_activities)} suspicious case(s) detected.")
-
-    for case in suspicious_activities:
-        case_id = case.get("case_id", case.get("Case ID", "N/A"))
-        case_title = case.get("case_title", case.get("Case Title", "Untitled"))
-
-        reasons = []
-
-        if str(case.get("priority", case.get("Priority", ""))).lower() == "high":
-            reasons.append("High Priority")
-
-        if str(case.get("status", case.get("Status", ""))).lower() == "investigating":
-            reasons.append("Investigation Ongoing")
-
-        st.write(f"🔴 **{case_id}** — {case_title}")
-        st.caption("Reason: " + ", ".join(reasons))
-else:
-    st.success("✅ No suspicious activity detected.")
-
-
-
+        
 st.divider()
 
 if st.session_state.role in [
