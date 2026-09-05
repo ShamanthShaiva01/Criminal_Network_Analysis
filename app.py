@@ -2148,8 +2148,8 @@ def log_activity(case_id, message):
         "Message": message,
         "Time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     })
-log_activity(case_id, "Case was created.")
-log_activity(update_case_id,f"status changed to {new_status}.")
+#log_activity(case_id, "Case was created.")
+#log_activity(update_case_id,f"status changed to {new_status}.")
 
 
 
