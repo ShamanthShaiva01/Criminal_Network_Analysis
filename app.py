@@ -978,8 +978,8 @@ case_ids = [
 ]
 if case_ids:
     selected_case_id = st.selectbox(
-        "Select a Case",
-         case_ids     
+         ["Select a case"]+ case_ids,
+        index=0
     )
     if selected_case_id =="Select a case":
         selected_case_id = None
