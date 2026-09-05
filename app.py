@@ -978,6 +978,7 @@ case_ids = [
 ]
 if case_ids:
     selected_case_id = st.selectbox(
+        "Select",
          ["Select a case"]+ case_ids,
         index=0
     )
