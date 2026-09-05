@@ -1967,6 +1967,8 @@ if "cases" not in st.session_state:
     st.session_state.cases =[]
 
 total_cases = len(st.session_state.cases)
+if "evidence" not in st.session_state:
+    st.session_state.evidence = {}
 
 total_evidence = sum(
     len(files)
